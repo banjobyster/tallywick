@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>tallywick vanilla example</title>
+  </head>
+  <body>
+    <p>Views: <span id="views" hidden></span></p>
+
+    <script type="module">
+    import { mountTallywick } from "../tallywick.js";
+
+    // Replace with your deployment origin.
+    const BASE = "https://tallywick-xxxx.deno.dev";
+
+    // Increments once on load, then fills #views only when the count is above zero.
+    mountTallywick("#views", BASE, "example-site", "home");
+    </script>
+  </body>
+</html>

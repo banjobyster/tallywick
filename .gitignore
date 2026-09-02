@@ -1,3 +1,14 @@
 .claude/
 *.local
 .DS_Store
+
+# dependencies and build output
+node_modules/
+adapters/cloudflare/dist/
+adapters/cloudflare/.wrangler/
+coverage/
+
+# local Deno KV files
+*.kv
+*.kv-shm
+*.kv-wal

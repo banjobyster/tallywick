@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tallywick",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-08-01",
+  "observability": { "enabled": true },
+
+  "durable_objects": {
+    "bindings": [
+      { "name": "TALLYWICK", "class_name": "TallywickDO" }
+    ]
+  },
+
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["TallywickDO"] }
+  ],
+
+  "vars": {
+    "ALLOWED_ORIGINS": "*",
+    "AUTO_CREATE": "true",
+    "DEDUP": "none",
+    "RATE_LIMIT": "60",
+    "REQUIRE_POST": "false"
+  }
+
+  // Secrets are set out of band, never in this file:
+  //   npx wrangler secret put ADMIN_TOKEN
+  //   npx wrangler secret put IP_SALT      (optional)
+}
