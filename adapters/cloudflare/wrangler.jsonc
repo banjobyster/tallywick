@@ -15,8 +15,10 @@
     { "tag": "v1", "new_sqlite_classes": ["TallywickDO"] }
   ],
 
+  // A fork sets ALLOWED_ORIGINS to its own site origin. This deployment serves
+  // banjobyster.github.io, which hosts both the portfolio and the bysters demo.
   "vars": {
-    "ALLOWED_ORIGINS": "*",
+    "ALLOWED_ORIGINS": "https://banjobyster.github.io",
     "AUTO_CREATE": "true",
     "DEDUP": "none",
     "RATE_LIMIT": "60",
