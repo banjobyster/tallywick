@@ -1,5 +1,6 @@
 # tallywick
 
+[![ci](https://github.com/banjobyster/tallywick/actions/workflows/ci.yml/badge.svg)](https://github.com/banjobyster/tallywick/actions/workflows/ci.yml)
 ![vibe coded](https://img.shields.io/badge/vibe%20coded-AI%20assisted-8957e5)
 
 A self hosted hit counter. One small service you deploy to your own free account
