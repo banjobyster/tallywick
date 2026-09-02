@@ -20,7 +20,7 @@
 /**
  * Call a tallywick counter.
  *
- * @param {string} baseUrl   The deployment origin, for example https://tallywick-xxx.deno.dev
+ * @param {string} baseUrl   The deployment origin, for example https://tallywick-xxxx.deno.dev
  * @param {string} namespace Counter namespace, for example your site name
  * @param {string} key       Counter key, for example the page path
  * @param {TallywickOptions} [options]
