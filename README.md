@@ -1,8 +1,16 @@
 # tallywick
 
+![vibe coded](https://img.shields.io/badge/vibe%20coded-AI%20assisted-8957e5)
+
 A self hosted hit counter. One small service you deploy to your own free account
 on Deno Deploy or Cloudflare Workers. It keeps running totals and hands them back
 as JSON or as an SVG badge.
+
+> This project was built with an AI coding assistant (Claude), from the design
+> through the tests and this documentation. Read the code on that basis before
+> depending on it. The storage conformance suite and the Cloudflare integration
+> tests run against real engines, not mocks, so behaviour is verified rather
+> than assumed.
 
 It is not analytics. There are no sessions, referrers, funnels, or dashboards.
 For that, run GoatCounter, Plausible, or Umami. tallywick answers one question,
