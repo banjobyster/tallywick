@@ -267,6 +267,13 @@ npm run typecheck
 npm run dry-run       # validate wrangler.jsonc and bundle the Worker
 ```
 
+### Continuous integration
+
+The pipeline is defined in [docs/ci-workflow.yml](docs/ci-workflow.yml). Move it
+to `.github/workflows/ci.yml` to activate it. That path is created through the
+GitHub web editor, or through a push from a token that carries the `workflow`
+scope.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
