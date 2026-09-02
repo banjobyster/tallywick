@@ -8,10 +8,13 @@ import { useEffect, useState } from "react";
 import { tallywick } from "./tallywick.js";
 
 /**
- * Call a counter once on mount.
+ * Call a counter on mount.
  *
- * `count` is null until the request resolves and stays null when the service
- * cannot be reached. Render nothing while it is null or zero.
+ * The view is recorded with one `hit`. If that request does not land, the hook
+ * falls back to a read (never rate limited) and retries it a few times with
+ * backoff, so a transient failure does not leave `count` null for the whole
+ * visit. `count` is null until a value arrives, and stays null only if every
+ * attempt fails. Render nothing while it is null or zero.
  *
  * @param {string} baseUrl
  * @param {string} namespace
@@ -25,14 +28,22 @@ export function useTallywick(baseUrl, namespace, key, options) {
   useEffect(() => {
     let active = true;
     setState((s) => ({ ...s, loading: true }));
-    tallywick(baseUrl, namespace, key, options).then((count) => {
+
+    (async () => {
+      let count = await tallywick(baseUrl, namespace, key, options);
+      for (const delay of [800, 2500, 6000, 15000]) {
+        if (!active || typeof count === "number") break;
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        count = await tallywick(baseUrl, namespace, key, { ...options, mode: "get" });
+      }
       if (!active) return;
       setState({
         count,
         loading: false,
         error: count === null ? new Error("tallywick unavailable") : null,
       });
-    });
+    })();
+
     return () => {
       active = false;
     };

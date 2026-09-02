@@ -61,6 +61,12 @@ export async function tallywick(baseUrl, namespace, key, options = {}) {
  * Call a counter and write the result into a DOM node, but only when the count
  * is greater than zero. Useful for a footer view count.
  *
+ * The view is recorded with one `hit`. If that request does not land, because
+ * the visitor is briefly offline, a proxy hiccups, or the hit path is rate
+ * limited, this falls back to a read (which is never rate limited) and retries
+ * it a few times with backoff, so one transient failure does not leave the
+ * counter blank for the whole visit.
+ *
  * @param {string|Element} target   A selector or element to fill.
  * @param {string} baseUrl
  * @param {string} namespace
@@ -70,11 +76,25 @@ export async function tallywick(baseUrl, namespace, key, options = {}) {
  */
 export async function mountTallywick(target, baseUrl, namespace, key, options = {}) {
   const el = typeof target === "string" ? document.querySelector(target) : target;
-  const count = await tallywick(baseUrl, namespace, key, options);
-  if (el && typeof count === "number" && count > 0) {
-    const format = options.format ?? ((n) => n.toLocaleString());
+  if (!el) return null;
+
+  const format = options.format ?? ((n) => n.toLocaleString());
+  const apply = (count) => {
+    if (typeof count !== "number" || count <= 0) return null;
     el.textContent = format(count);
     if ("hidden" in el) el.hidden = false;
+    return count;
+  };
+
+  // First attempt records the view.
+  const hit = apply(await tallywick(baseUrl, namespace, key, options));
+  if (hit !== null) return hit;
+
+  // The hit did not land. Read instead, and retry the read with backoff.
+  for (const delay of [800, 2500, 6000, 15000]) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    const read = apply(await tallywick(baseUrl, namespace, key, { ...options, mode: "get" }));
+    if (read !== null) return read;
   }
-  return count;
+  return null;
 }
